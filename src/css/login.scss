@@ -1,0 +1,46 @@
+
+.container{
+  margin-top: 8%;
+}
+
+.logo-container{
+  height: 100%;
+  width: 100%;
+
+}
+.logo-img{
+  height: 80px;
+  width: 80px;
+}
+
+.form-control:focus {
+  outline:none !important;
+  box-shadow:none !important;
+}
+
+
+.forget-create{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.forget-create-signup{
+  margin-top: 10px;
+  display: flex;
+  justify-content: right
+}
+
+.forget-create-text{
+  font-size: 12px;
+  color: gray;
+}
+
+.forget-create-text:hover{
+  text-decoration: underline;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
