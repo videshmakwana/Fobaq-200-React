@@ -2,7 +2,7 @@ import React from "react";
 import FOBAQ from "../images/FOBAQ.png";
 import { useNavigate } from "react-router-dom";
 
-const ResetPassword = () => {
+const ForgetPassword = () => {
   const navigate = useNavigate();
 
   return (
@@ -53,4 +53,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgetPassword;

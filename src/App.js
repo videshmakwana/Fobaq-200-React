@@ -7,7 +7,8 @@ const ErrorBoundary = lazy(() => import("./ErrorBoundary/ErrorBoundary.js"));
 const Login = lazy(() => import("./components/Login/Login"));
 const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 const Signup = lazy(() => import("./components/Login/Signup"));
-const ResetPassword = lazy(() => import("./components/Login/ResetPassword"));
+const ForgetPassword = lazy(() => import("./components/Login/ForgetPassword"));
+const SetPassword = lazy(() => import("./components/Login/SetPassword"));
 
 const App = () => {
   return (
@@ -18,7 +19,8 @@ const App = () => {
             <Route path="" element={<Login />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
-            <Route path="password/forget" element={<ResetPassword />} />
+            <Route path="password/forget" element={<ForgetPassword />} />
+            <Route path="reset-password" element={<SetPassword />} />
             <Route path="dashboard" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>

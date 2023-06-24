@@ -12,8 +12,8 @@ const Login = () => {
   const handleSubmit = async (values) => {
     await loginVerifier(values)
       .then((response) => {
+        setDataInLocalStorage(response.data);
         if (response.data.token) {
-          setDataInLocalStorage(response.data);
           navigate("/dashboard");
         }
       })

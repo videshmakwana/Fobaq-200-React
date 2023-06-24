@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { signUpAccount } from "../Action/LoginAction";
 import { useFormik } from "formik";
 
-
 const Signup = () => {
   const navigate = useNavigate();
   const [signupToken, setSignUpToken] = useState("");
+
+  console.log(signupToken);
 
   const handleSubmit = async (values) => {
     console.log(values);
