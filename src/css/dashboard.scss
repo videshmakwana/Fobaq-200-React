@@ -155,6 +155,7 @@
     .input_field {
       width: 600px;
       border-radius: 8px;
+      padding: 8px;
       border: 1px solid #d1d1d1;
     }
   }
@@ -233,7 +234,7 @@
     }
     .post-content {
       padding: 16px;
-      height: 150px;
+      max-height: 150px;
       overflow: hidden;
       &.more {
         height: 100%;

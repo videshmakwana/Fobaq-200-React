@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NewPost from "./NewPost";
 import Form from "react-bootstrap/Form";
 // import EditGeneratedPost from "./EditGeneratedPost";
@@ -17,7 +17,7 @@ const CreatePost = () => {
   const [generatedContent, setGeneratedContent] = useState("");
   const [step, setStep] = useState(1);
 
-  const api_key = "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";
+  const api_key = "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";
   const handleChats = async () => {
     const resp = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -36,13 +36,13 @@ const CreatePost = () => {
     setGeneratedContent(resp?.data?.choices[0]?.message?.content);
   };
 
-  const generateImage = async () => {
+  const generateImage = useCallback(async () => {
     try {
       const resp = await axios.post(
         "https://api.openai.com/v1/images/generations",
         {
           prompt: inputTopic,
-          n: 1,
+          n: 2,
           size: "512x512",
         },
         {
@@ -52,17 +52,20 @@ const CreatePost = () => {
         }
       );
       const data = await resp.data.data[0].url;
+      //   const data = await resp.data.data;
+      console.log(data);
       setImage(data);
       setTags([]);
       setHashTag([]);
       setIsLoading(false);
       setStep(2);
+      setInputTopic("");
       return data;
     } catch (error) {
       console.log(error);
       setIsLoading(false);
     }
-  };
+  }, [inputTopic]);
 
   const handleSteps = (step) => {
     setStep(step);
@@ -95,6 +98,16 @@ const CreatePost = () => {
   const handleInputChange = (e) => {
     setInputTopic(e?.target?.value);
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      inputTopic && generateImage();
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [inputTopic, generateImage]);
 
   const handleRadioInput = (check_field) => {
     setSelectPostType(check_field);

@@ -26,7 +26,7 @@ export default class NewPost extends Component {
           postContent: generatedContent,
           height: 424,
           width: 424,
-          userId: localStorage.getItem("userId"),
+          userId: parseInt(localStorage.getItem("userId")),
           schedulerTime: "",
           imageURL: imgSrc,
           facebook: false,
@@ -35,7 +35,6 @@ export default class NewPost extends Component {
         },
         config
       );
-      console.log(response.data);
       if (response?.data?.type === "Success") {
         handleSteps(1);
       }

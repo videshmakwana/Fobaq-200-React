@@ -43,9 +43,9 @@ const Login = () => {
   });
   return (
     <div className="main-container">
-      <div className="container ">
+      <div className="container-box">
         <div className="row justify-content-center">
-          <div className="col-md-3">
+          <div className="col-md-5 left-part">
             <div className="card mt-5">
               <div className="text-center logo-container mt-2">
                 <img className="logo-img" src={FOBAQ} alt="Logo" />
@@ -113,6 +113,15 @@ const Login = () => {
                   </div>
                 </form>
               </div>
+            </div>
+          </div>
+          <div className="col-md-7 right-part">
+            <div>
+              <h2>Introducing: A free micro-site by APIDAE</h2>
+              <p>
+                A Start Page is a beautiful, flexible, mobile-friendly landing
+                page that you can build in minutes and update in seconds
+              </p>
             </div>
           </div>
         </div>
