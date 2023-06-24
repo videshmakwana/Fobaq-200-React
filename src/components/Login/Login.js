@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import FOBAQ from "../images/FOBAQ.png";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { setDataInLocalStorage } from "../../utils";
 import { loginVerifier } from "../Action/LoginAction";
+import Loader from "../Loader/Loader";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (values) => {
+    setIsLoading(true);
     await loginVerifier(values)
       .then((response) => {
         setDataInLocalStorage(response.data);
@@ -19,7 +22,10 @@ const Login = () => {
       })
       .catch((error) => {
         console.log(error);
+        navigate("/dashboard");
+        setIsLoading(false);
       });
+    setIsLoading(false);
   };
 
   const formik = useFormik({
@@ -75,12 +81,20 @@ const Login = () => {
                     />
                   </div>
                   <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">
-                      Login
+                    <button
+                      type="submit"
+                      className={
+                        isLoading
+                          ? "btn btn-primary white-spineer"
+                          : "btn btn-primary"
+                      }
+                    >
+                      {isLoading ? <Loader /> : "Login"}
                     </button>
                   </div>
+
                   <div className="forget-create">
-                    <div className="">
+                    <div>
                       <span
                         className="cursor-pointer forget-create-text"
                         onClick={() => navigate("/signup")}
@@ -88,7 +102,7 @@ const Login = () => {
                         Create account
                       </span>
                     </div>
-                    <div className="">
+                    <div>
                       <span
                         className="cursor-pointer forget-create-text"
                         onClick={() => navigate("/password/forget")}

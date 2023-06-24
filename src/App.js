@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./css/style.scss";
 import FallBack from "./ErrorBoundary/FallBack";
+import UserProtectedRoutes from "./ProtectedRoute/ProtectedRoute";
 
 const ErrorBoundary = lazy(() => import("./ErrorBoundary/ErrorBoundary.js"));
 const Login = lazy(() => import("./components/Login/Login"));
@@ -21,7 +22,10 @@ const App = () => {
             <Route path="signup" element={<Signup />} />
             <Route path="password/forget" element={<ForgetPassword />} />
             <Route path="reset-password" element={<SetPassword />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route
+              path="dashboard"
+              element={<UserProtectedRoutes element={<Dashboard />} />}
+            />
           </Routes>
         </BrowserRouter>
       </Suspense>

@@ -29,3 +29,13 @@ export const loginVerifier = async (data) => {
     return error;
   }
 };
+
+export const forgotPassword = async (data) => {
+  return await axios.post(`${apiUrl}rest/accounts/password/forget/${data}`);
+};
+
+export const setUserPassword = (data) => {
+  const config = { headers };
+
+  return axios.put(`${apiUrl}rest/accounts/password/change`, data, config);
+};

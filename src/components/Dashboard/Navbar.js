@@ -1,21 +1,31 @@
-import React, { Component } from "react";
+import React from "react";
 import FOBAQ from "../images/FOBAQ.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { clearLocalStorage } from "../../utils";
 
-export default class Navbar extends Component {
-  render() {
-    return (
-      <div className="navbar">
-        <div className="logo">
-          <img className="logo-img" src={FOBAQ} alt="Logo" />
-        </div>
-        <div className="name-list">
-          <Link className="profile" to="/profile">
-            Profile
-          </Link>
-          <button className="logout-btn">Log out</button>
-        </div>
+const Navbar = () => {
+  const navigate = useNavigate();
+  return (
+    <div className="navbar">
+      <div className="logo">
+        <img className="logo-img" src={FOBAQ} alt="Logo" />
       </div>
-    );
-  }
-}
+      <div className="name-list">
+        <Link className="profile" to="/profile">
+          Profile
+        </Link>
+        <button
+          className="logout-btn"
+          onClick={() => {
+            clearLocalStorage();
+            navigate("/login");
+          }}
+        >
+          Log out
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;

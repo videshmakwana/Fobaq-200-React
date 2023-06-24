@@ -4,23 +4,27 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { signUpAccount } from "../Action/LoginAction";
 import { useFormik } from "formik";
+import { setDataInLocalStorage } from "../../utils";
+import Loader from "../Loader/Loader";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [signupToken, setSignUpToken] = useState("");
-
-  console.log(signupToken);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (values) => {
-    console.log(values);
+    setIsLoading(true);
     await signUpAccount({ email: values.email, password: values.password })
       .then((response) => {
-        setSignUpToken(response.data.data);
+        setDataInLocalStorage(response.data);
+        if (response.data.token) {
+          navigate("/dashboard");
+        }
       })
       .catch((error) => {
         console.log(error);
         navigate("/login");
       });
+    setIsLoading(false);
   };
 
   const formik = useFormik({
@@ -77,8 +81,15 @@ const Signup = () => {
                     />
                   </div>
                   <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">
-                      Sign Up
+                    <button
+                      type="submit"
+                      className={
+                        isLoading
+                          ? "btn btn-primary white-spineer"
+                          : "btn btn-primary"
+                      }
+                    >
+                      {isLoading ? <Loader /> : "Sign Up"}
                     </button>
                   </div>
                   <div className="forget-create-signup">
