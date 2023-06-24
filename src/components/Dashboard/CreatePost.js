@@ -1,6 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
 import NewPost from "./NewPost";
+import Form from "react-bootstrap/Form";
+// import EditGeneratedPost from "./EditGeneratedPost";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 const CreatePost = () => {
   const [inputTopic, setInputTopic] = useState("");
@@ -9,11 +13,11 @@ const CreatePost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tags, setTags] = useState([]);
   const [hashTag, setHashTag] = useState({});
+  const [isEdit, setIsEdit] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
   const [step, setStep] = useState(1);
 
-  const api_key = "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";
-  console.log(generatedContent, hashTag, tags, image);
+  const api_key = "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";
   const handleChats = async () => {
     const resp = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -60,6 +64,10 @@ const CreatePost = () => {
     }
   };
 
+  const handleSteps = (step) => {
+    setStep(step);
+  };
+
   const getTags = async () => {
     const img_url = await generateImage();
     const apiKey = "acc_78b40252a8b826e";
@@ -80,6 +88,10 @@ const CreatePost = () => {
     }
   };
 
+  const handlePostEdit = () => {
+    setIsEdit(true);
+  };
+
   const handleInputChange = (e) => {
     setInputTopic(e?.target?.value);
   };
@@ -92,6 +104,11 @@ const CreatePost = () => {
     setIsLoading(true);
     handleChats();
     getTags();
+  };
+
+  const handleHashtagRemove = (tag) => {
+    const updateTags = tags?.filter((val) => val !== tag);
+    setTags(updateTags);
   };
 
   return (
@@ -111,7 +128,7 @@ const CreatePost = () => {
               className="input_field"
             />
           </div>
-          <div className="">
+          <div className="wrapper_field">
             <label className="label field_label">
               What do you want to generate?
             </label>
@@ -149,9 +166,53 @@ const CreatePost = () => {
         <NewPost
           imgSrc={image}
           tags={tags}
+          handlePostEdit={handlePostEdit}
           generatedContent={generatedContent}
+          handleSteps={handleSteps}
         />
       ) : null}
+      <Modal
+        className="popup-modal"
+        show={isEdit}
+        onHide={() => setIsEdit(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Label>Post Content</Form.Label>
+            <Form.Control
+              as="textarea"
+              value={generatedContent}
+              onChange={(e) => setGeneratedContent(e?.target.value)}
+              rows={5}
+            />
+          </Form.Group>
+          <label className="editTag-label">Hash Tag</label>
+          <div className="editTag">
+            {tags?.map((tag) => (
+              <span>
+                {tag}
+                <span
+                  className="cros-btn"
+                  onClick={() => handleHashtagRemove(tag)}
+                >
+                  x
+                </span>
+              </span>
+            ))}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setIsEdit(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={() => setIsEdit(false)}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
