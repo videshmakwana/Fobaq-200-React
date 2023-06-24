@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import NewPost from "./NewPost";
 import Form from "react-bootstrap/Form";
 // import EditGeneratedPost from "./EditGeneratedPost";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Loader from "../Loader/Loader"
 
 const CreatePost = () => {
   const [inputTopic, setInputTopic] = useState("");
@@ -16,8 +17,8 @@ const CreatePost = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
   const [step, setStep] = useState(1);
-
-  const api_key = "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";
+  const inputRef= useRef();
+  const api_key = "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";
   const handleChats = async () => {
     const resp = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -112,9 +113,10 @@ const CreatePost = () => {
   };
 
   return (
-    <div class="create-post-container">
+    <div className="create-post-container">
       {step === 1 ? (
-        <>
+        !isLoading ? (
+                <>
           <h2 className="title">What do you want to create today?</h2>
           <div className="form-field">
             <label htmlFor="topic" className="label field_label">
@@ -126,7 +128,10 @@ const CreatePost = () => {
               value={inputTopic}
               id="topic"
               className="input_field"
+              minLength={15}
+              ref={inputRef}
             />
+            <div className={`required`}>Minimum 15 characters are required</div>
           </div>
           <div className="wrapper_field">
             <label className="label field_label">
@@ -157,10 +162,11 @@ const CreatePost = () => {
               </label>
             </div>
           </div>
-          <button className="primary-btn" onClick={generatePost}>
-            {isLoading ? "Loading..." : "Generate Post"}
+          <button className={"primary-btn"} onClick={inputTopic.length >= 15 ? generatePost : ()=>{inputRef?.current?.focus()}}>
+            {"Generate Post"}
           </button>
         </>
+        ):<div className="my-4"><Loader/></div>
       ) : null}
       {step === 2 ? (
         <NewPost

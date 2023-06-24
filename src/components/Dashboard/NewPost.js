@@ -26,7 +26,7 @@ export default class NewPost extends Component {
           postContent: generatedContent,
           height: 424,
           width: 424,
-          userId: localStorage.getItem("userId"),
+          userId: parseInt(localStorage.getItem("userId")),
           schedulerTime: "",
           imageURL: imgSrc,
           facebook: false,
