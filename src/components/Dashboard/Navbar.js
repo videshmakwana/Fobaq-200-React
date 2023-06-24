@@ -3,6 +3,10 @@ import FOBAQ from "../images/FOBAQ.png";
 import { Link } from "react-router-dom";
 
 export default class Navbar extends Component {
+  handleLogout = () => {
+    localStorage.clear();
+    window.location.replace("/login");
+  };
   render() {
     return (
       <div className="navbar">
@@ -13,7 +17,9 @@ export default class Navbar extends Component {
           <Link className="profile" to="/profile">
             Profile
           </Link>
-          <button className="logout-btn">Log out</button>
+          <button className="logout-btn" onClick={this.handleLogout}>
+            Log out
+          </button>
         </div>
       </div>
     );
