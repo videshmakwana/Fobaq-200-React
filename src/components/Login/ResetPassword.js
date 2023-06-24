@@ -1,8 +1,7 @@
 import React from "react";
-
 import FOBAQ from "../images/FOBAQ.png";
 
-const Login = () => {
+const ResetPassword = () => {
   return (
     <div className="main-container">
       <div className="container ">
@@ -10,10 +9,10 @@ const Login = () => {
           <div className="col-md-3">
             <div className="card mt-5">
               <div className="text-center logo-container mt-2">
-                <img className="logo-img" src={FOBAQ} alt="Logo" />
+                <img className="logo-img " src={FOBAQ} alt="Logo" />
               </div>
               <div className="card-body">
-                <h3 className="card-title text-center">Login</h3>
+                <h3 className="card-title text-center">Reset your password</h3>
                 <form>
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">
@@ -27,33 +26,16 @@ const Login = () => {
                       placeholder="Enter email"
                     />
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      placeholder="Enter password"
-                    />
-                  </div>
+
                   <div className="d-grid">
                     <button type="submit" className="btn btn-primary">
-                      Login
+                      Send Password Reset Email
                     </button>
                   </div>
-                  <div className="forget-create">
-                    <div className="">
-                      <span className="cursor-pointer forget-create-text">
-                        Create account
-                      </span>
-                    </div>
-                    <div className="">
-                      <span className="cursor-pointer forget-create-text">
-                        Forgot password ?
-                      </span>
-                    </div>
+                  <div className="forget-create-signup">
+                    <span className="cursor-pointer forget-create-text">
+                      Back to login
+                    </span>
                   </div>
                 </form>
               </div>
@@ -65,4 +47,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
