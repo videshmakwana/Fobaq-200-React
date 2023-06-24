@@ -1,7 +1,10 @@
 import React from "react";
 import FOBAQ from "../images/FOBAQ.png";
+import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="main-container">
       <div className="container ">
@@ -33,7 +36,10 @@ const ResetPassword = () => {
                     </button>
                   </div>
                   <div className="forget-create-signup">
-                    <span className="cursor-pointer forget-create-text">
+                    <span
+                      className="cursor-pointer forget-create-text"
+                      onClick={() => navigate("/login")}
+                    >
                       Back to login
                     </span>
                   </div>
