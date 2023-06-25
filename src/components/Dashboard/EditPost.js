@@ -18,6 +18,8 @@ export default class NewPost extends Component {
       edit: false,
       content: "",
       contentTags: [],
+      updatedTagList: [],
+      tagValue: "",
     };
   }
 
@@ -33,14 +35,14 @@ export default class NewPost extends Component {
     console.log(this.props.post);
   };
 
-  handleHashtagRemove = (tag) => {
-    const { contentTags } = this.state;
-    const updateTags = contentTags?.filter((val) => val !== tag);
-    this.setState({ contentTags: updateTags });
-  };
+  //   handleHashtagRemove = (tag) => {
+  //     const { contentTags } = this.state;
+  //     const updateTags = contentTags?.filter((val) => val !== tag);
+  //     this.setState({ contentTags: updateTags });
+  //   };
 
   handleSavePost = async () => {
-    const { imgSrc, handleSteps, post, getPostList } = this.props;
+    const { imgSrc, post, getPostList } = this.props;
     const { content, contentTags } = this.state;
     const config = { headers };
     try {
@@ -74,10 +76,24 @@ export default class NewPost extends Component {
     this.setState({ edit: isOpen });
   };
 
+  handleHashtagRemove = (tag) => {
+    const { updatedTagList } = this.state;
+    this.setState({ updatedTagList: [...updatedTagList, tag] });
+  };
+
+  removeTagValue = (e) => {
+    const { contentTags } = this.state;
+    this.setState({
+      tagValue: "",
+      contentTags: [...contentTags, e?.target?.value],
+    });
+  };
+
   render() {
     const { imgSrc, tags, generatedContent } = this.props;
     console.log(this.props);
-    const { isShowMore, edit, content, contentTags } = this.state;
+    const { isShowMore, edit, content, contentTags, updatedTagList, tagValue } =
+      this.state;
     return (
       <>
         <div className="post-container">
@@ -145,16 +161,27 @@ export default class NewPost extends Component {
             <label className="editTag-label">Hash Tag</label>
             <div className="editTag">
               {contentTags?.map((tag) => (
-                <span>
+                <span
+                  className={updatedTagList.includes(tag) ? "added" : ""}
+                  onClick={() => this.handleHashtagRemove(tag)}
+                >
                   {tag}
-                  <span
-                    className="cros-btn"
-                    onClick={() => this.handleHashtagRemove(tag)}
-                  >
-                    x
-                  </span>
                 </span>
               ))}
+              <input
+                name="tag-add"
+                id="tag-add"
+                className="tag-add"
+                onChange={(e) =>
+                  this.setState({
+                    tagValue: e?.target?.value,
+                    updatedTagList: [...updatedTagList, e?.target?.value],
+                  })
+                }
+                value={tagValue}
+                //   onKeyDown={(e) => console.log(e)}
+                onKeyDown={(e) => e.key === "Enter" && this.removeTagValue(e)}
+              />
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -164,7 +191,14 @@ export default class NewPost extends Component {
             >
               Close
             </Button>
-            <Button variant="primary" onClick={() => this.handleSavePost()}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                this.setState({ contentTags: updatedTagList }, () => {
+                  this.handleSavePost();
+                });
+              }}
+            >
               Save Changes
             </Button>
           </Modal.Footer>

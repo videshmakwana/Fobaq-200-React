@@ -1,9 +1,6 @@
 import axios from "axios";
 
-// const apiUrl = process.env.REACT_APP_BASE_URL;
-
-const apiUrl =
-  "https://af42-2405-201-2022-c90b-24d4-ea1f-29c-7329.ngrok-free.app/";
+const apiUrl = process.env.REACT_APP_BASE_URL;
 
 const headers = {
   "Content-Type": "application/json",

@@ -17,8 +17,10 @@ const CreatePost = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
   const [step, setStep] = useState(1);
+  const [tagValue, setTagValue] = useState("");
+  const [tagList, setTagList] = useState([]);
   const inputRef = useRef();
-  const api_key = "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";
+  const api_key = "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";
   const handleChats = async () => {
     const resp = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -110,9 +112,21 @@ const CreatePost = () => {
     getTags();
   };
 
+  const handleAddTags = (e) => {
+    setTagValue(e?.target?.value);
+    setTagList([...tagList, e?.target?.value]);
+
+    // setTags([...tags, e?.target?.value]);
+  };
+  const removeTagValue = (e) => {
+    setTagValue("");
+    setTags([...tags, e?.target?.value]);
+  };
+
   const handleHashtagRemove = (tag) => {
-    const updateTags = tags?.filter((val) => val !== tag);
-    setTags(updateTags);
+    setTagList([...tagList, tag]);
+    // const updateTags = tags?.filter((val) => val !== tag);
+    // setTags(updateTags);
   };
 
   return (
@@ -219,23 +233,41 @@ const CreatePost = () => {
           <label className="editTag-label">Hash Tag</label>
           <div className="editTag">
             {tags?.map((tag) => (
-              <span>
+              <span
+                className={tagList.includes(tag) ? "added" : ""}
+                onClick={() => handleHashtagRemove(tag)}
+              >
                 {tag}
-                <span
+                {/* <span
                   className="cros-btn"
                   onClick={() => handleHashtagRemove(tag)}
                 >
                   x
-                </span>
+                </span> */}
               </span>
             ))}
+            <input
+              name="tag-add"
+              id="tag-add"
+              className="tag-add"
+              onChange={handleAddTags}
+              value={tagValue}
+              //   onKeyDown={(e) => console.log(e)}
+              onKeyDown={(e) => e.key === "Enter" && removeTagValue(e)}
+            />
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setIsEdit(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => setIsEdit(false)}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              setTags(tagList);
+              setIsEdit(false);
+            }}
+          >
             Save Changes
           </Button>
         </Modal.Footer>
