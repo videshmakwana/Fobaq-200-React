@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import NewPost from "./NewPost";
+import EditPost from "./EditPost";
 const apiUrl = process.env.REACT_APP_BASE_URL;
 const headers = {
   "Content-Type": "application/json",
@@ -11,6 +11,7 @@ const data = {
 };
 function PostsList() {
   const [postDetails, setPostDetails] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
   const getPostList = async () => {
     const config = { headers };
     try {
@@ -30,13 +31,20 @@ function PostsList() {
   useEffect(() => {
     getPostList();
   }, []);
+
+  const handlePostEdit = () => {
+    setIsEdit(true);
+  };
   return (
     <div className="allpost">
       {postDetails.map((post) => (
-        <NewPost
+        <EditPost
           imgSrc={post.imageURL}
           tags={post.tags.split(" ")}
           generatedContent={post.postContent}
+          post={post}
+          handlePostEdit={handlePostEdit}
+          getPostList={getPostList}
         />
       ))}
     </div>

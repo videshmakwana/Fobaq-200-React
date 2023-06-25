@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import NewPost from "./NewPost";
 import Form from "react-bootstrap/Form";
 // import EditGeneratedPost from "./EditGeneratedPost";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Loader from "../Loader/Loader";
 
 const CreatePost = () => {
   const [inputTopic, setInputTopic] = useState("");
@@ -16,8 +17,8 @@ const CreatePost = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
   const [step, setStep] = useState(1);
-
-  const api_key = "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";
+  const inputRef = useRef();
+  const api_key = "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";
   const handleChats = async () => {
     const resp = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -36,7 +37,7 @@ const CreatePost = () => {
     setGeneratedContent(resp?.data?.choices[0]?.message?.content);
   };
 
-  const generateImage = useCallback(async () => {
+  const generateImage = async () => {
     try {
       const resp = await axios.post(
         "https://api.openai.com/v1/images/generations",
@@ -65,7 +66,7 @@ const CreatePost = () => {
       console.log(error);
       setIsLoading(false);
     }
-  }, [inputTopic]);
+  };
 
   const handleSteps = (step) => {
     setStep(step);
@@ -99,16 +100,6 @@ const CreatePost = () => {
     setInputTopic(e?.target?.value);
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      inputTopic && generateImage();
-    }, 3000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [inputTopic, generateImage]);
-
   const handleRadioInput = (check_field) => {
     setSelectPostType(check_field);
   };
@@ -125,55 +116,77 @@ const CreatePost = () => {
   };
 
   return (
-    <div class="create-post-container">
+    <div className="create-post-container">
       {step === 1 ? (
-        <>
-          <h2 className="title">What do you want to create today?</h2>
-          <div className="form-field">
-            <label htmlFor="topic" className="label field_label">
-              Any Topic Brewing in your mind?
-            </label>
-            <textarea
-              name="topic"
-              onChange={handleInputChange}
-              value={inputTopic}
-              id="topic"
-              className="input_field"
-            />
-          </div>
-          <div className="wrapper_field">
-            <label className="label field_label">
-              What do you want to generate?
-            </label>
-            <div class="wrapper">
-              <input
-                type="radio"
-                onClick={() => handleRadioInput("image")}
-                name="select"
-                id="option-1"
-                checked={selectPostType === "image"}
-              />
-              <input
-                type="radio"
-                onClick={() => handleRadioInput("video")}
-                name="select"
-                id="option-2"
-                checked={selectPostType === "video"}
-              />
-              <label for="option-1" class="option option-1">
-                <div class="dot"></div>
-                <span>Images</span>
+        !isLoading ? (
+          <>
+            <h2 className="title">What do you want to create today?</h2>
+            <div className="form-field">
+              <label htmlFor="topic" className="label field_label">
+                Any Topic Brewing in your mind?
               </label>
-              <label for="option-2" class="option option-2">
-                <div class="dot"></div>
-                <span>video</span>
-              </label>
+              <textarea
+                name="topic"
+                onChange={handleInputChange}
+                value={inputTopic}
+                id="topic"
+                className="input_field"
+                minLength={15}
+                ref={inputRef}
+              />
+              <div className={`required`}>
+                Minimum 15 characters are required
+              </div>
             </div>
+            <div className="wrapper_field">
+              <label className="label field_label">
+                What do you want to generate?
+              </label>
+              <div class="wrapper">
+                <input
+                  type="radio"
+                  onClick={() => handleRadioInput("image")}
+                  name="select"
+                  id="option-1"
+                  checked={selectPostType === "image"}
+                />
+                <input
+                  type="radio"
+                  onClick={() => handleRadioInput("video")}
+                  name="select"
+                  id="option-2"
+                  checked={selectPostType === "video"}
+                />
+                <label for="option-1" class="option option-1">
+                  <div class="dot"></div>
+                  <span>Images</span>
+                </label>
+                <label for="option-2" class="option option-2">
+                  <div class="dot"></div>
+                  <span>video</span>
+                </label>
+              </div>
+            </div>
+            <button
+              className={`primary-btn ${
+                inputTopic.length >= 15 ? "" : "disable"
+              } `}
+              onClick={
+                inputTopic.length >= 15
+                  ? generatePost
+                  : () => {
+                      inputRef?.current?.focus();
+                    }
+              }
+            >
+              {"Generate Post"}
+            </button>
+          </>
+        ) : (
+          <div className="my-4">
+            <Loader />
           </div>
-          <button className="primary-btn" onClick={generatePost}>
-            {isLoading ? "Loading..." : "Generate Post"}
-          </button>
-        </>
+        )
       ) : null}
       {step === 2 ? (
         <NewPost
@@ -182,6 +195,7 @@ const CreatePost = () => {
           handlePostEdit={handlePostEdit}
           generatedContent={generatedContent}
           handleSteps={handleSteps}
+          isShowBack
         />
       ) : null}
       <Modal

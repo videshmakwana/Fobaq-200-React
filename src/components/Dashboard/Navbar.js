@@ -11,9 +11,6 @@ const Navbar = () => {
         <img className="logo-img" src={FOBAQ} alt="Logo" />
       </div>
       <div className="name-list">
-        <Link className="profile" to="/profile">
-          Profile
-        </Link>
         <button
           className="logout-btn"
           onClick={() => {
